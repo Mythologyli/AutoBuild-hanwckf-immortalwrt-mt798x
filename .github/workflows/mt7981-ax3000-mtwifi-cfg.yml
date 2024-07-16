@@ -19,7 +19,7 @@ on:
 #    - cron: 0 16 * * *
 
 env:
-  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x.git
+  REPO_URL: https://github.com/MeIsReallyBa/immortalwrt-mt798x
   REPO_BRANCH: openwrt-21.02
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
