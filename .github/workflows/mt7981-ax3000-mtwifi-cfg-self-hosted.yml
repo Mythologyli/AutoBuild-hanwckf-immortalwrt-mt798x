@@ -30,6 +30,7 @@ jobs:
     name: 编译mt7981-ax3000-mtwifi-cfg固件
     runs-on: self-hosted
 
+    steps:
     - name: 准备
       uses: actions/checkout@v3.1.0  
       
