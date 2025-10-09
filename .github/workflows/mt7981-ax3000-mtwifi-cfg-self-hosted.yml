@@ -49,7 +49,7 @@ jobs:
         sudo -E apt-get autoclean
         # sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
-        # sudo chown 1001:121 /workdir
+        sudo chown 1001:121 /workdir
 
     - name: 下载固件源码
       working-directory: /workdir
