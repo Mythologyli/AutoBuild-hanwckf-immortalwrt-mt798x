@@ -49,12 +49,12 @@ jobs:
         sudo -E apt-get autoclean
         # sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
-        # sudo chown $USER:121 /workdir
+        # sudo chown 1001:121 /workdir
 
     - name: 下载固件源码
       working-directory: /workdir
       run: |
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL -b $REPO_BRANCH --depth=1 openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
     - name: 更新 & 安装 feeds
