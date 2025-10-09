@@ -47,7 +47,7 @@ jobs:
         sudo -E apt-get -y install build-essential gawk gcc-multilib flex git gettext libncurses5-dev libssl-dev python3-distutils zlib1g-dev
         sudo -E apt-get -y autoremove
         sudo -E apt-get autoclean
-        sudo timedatectl set-timezone "$TZ"
+        # sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
