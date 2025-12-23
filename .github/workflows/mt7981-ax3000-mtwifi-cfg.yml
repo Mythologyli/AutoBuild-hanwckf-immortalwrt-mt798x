@@ -20,7 +20,7 @@ on:
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
-  REPO_BRANCH: openwrt-24.10-6.6
+  REPO_BRANCH: openwrt-23.05
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
@@ -82,10 +82,13 @@ jobs:
       run: |
         cd openwrt
         cp -f defconfig/mt7981-ax3000.config .config
-        #echo CONFIG_PACKAGE_kmod-wireguard=y >> .config
         #echo CONFIG_PACKAGE_kmod-nft-socket=y >> .config
         #echo CONFIG_PACKAGE_kmod-nft-tproxy=y >> .config
         #echo CONFIG_PACKAGE_kmod-netlink-diag=y >> .config
+        #echo CONFIG_PACKAGE_kmod-l2tp=y >> .config
+        #echo CONFIG_PACKAGE_kmod-pppol2tp=y >> .config
+        #echo CONFIG_PACKAGE_xl2tpd=y >> .config
+        #echo CONFIG_PACKAGE_ppp-mod-pppol2tp=y >> .config
         
     - name: 下载软件包
       id: package
