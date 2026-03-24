@@ -8,7 +8,7 @@
 #修改以下代码或者开启触发开关都好，要严格按格式对好,前面有多少空格也要看清楚
 #代码里有 name: 后面的内容随便改,冒号后面是有个空格的,如果修改固件名字就要考虑能不能显示出你想要的
 
-name: mt7981-ax3000-mtwifi-cfg 闭源固件
+name: EVO 编译
 
 #permissions: write-all
 #开启写权限，防止无法上传到release
@@ -26,9 +26,23 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
+  provision:
+    runs-on: ubuntu-latest
+    outputs:
+      runner_label: ${{ steps.evo.outputs.runner_label }}
+      instance_id: ${{ steps.evo.outputs.instance_id }}
+    steps:
+      - id: evo
+        uses: Mythologyli/setup-evo-runner@main
+        with:
+          evo_api_token: ${{ secrets.EVO_API_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
+          product_id: 41
+
   build:
     name: 编译mt7981-ax3000-mtwifi-cfg固件
-    runs-on: self-hosted
+    needs: provision
+    runs-on: [self-hosted, "${{ needs.provision.outputs.runner_label }}"]
 
     steps:
     - name: 准备
@@ -47,7 +61,7 @@ jobs:
         sudo -E apt-get -y install build-essential gawk gcc-multilib flex git gettext libncurses5-dev libssl-dev python3-distutils zlib1g-dev file
         sudo -E apt-get -y autoremove
         sudo -E apt-get autoclean
-        # sudo timedatectl set-timezone "$TZ"
+        sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown 1001:121 /workdir
 
@@ -88,10 +102,6 @@ jobs:
         echo -e "$(($(nproc)+1)) thread compile"
         make -j$(($(nproc)+1)) || make -j$(nproc) || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
-
-    - name: 检查github储存空间情况
-      if: (!cancelled())
-      run: df -hT
 
     - name: 整理文件
       id: organize
@@ -139,3 +149,13 @@ jobs:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup:
+      needs: [provision, build]
+      if: always()
+      runs-on: ubuntu-latest
+      steps:
+        - uses: Mythologyli/setup-evo-runner/teardown@main
+          with:
+            evo_api_token: ${{ secrets.EVO_API_TOKEN }}
+            instance_id: ${{ needs.provision.outputs.instance_id }}
