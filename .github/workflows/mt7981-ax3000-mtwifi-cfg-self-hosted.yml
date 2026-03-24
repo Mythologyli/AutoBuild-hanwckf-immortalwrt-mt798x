@@ -20,7 +20,7 @@ on:
 
 env:
   REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
-  REPO_BRANCH: openwrt-23.05
+  REPO_BRANCH: openwrt-24.10-6.6
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
@@ -40,7 +40,7 @@ jobs:
           product_id: 41
 
   build:
-    name: 编译mt7981-ax3000-mtwifi-cfg固件
+    name: 编译mt7986-ax4200-bpir3_mini-mtwifi-cfg固件
     needs: provision
     runs-on: [self-hosted, "${{ needs.provision.outputs.runner_label }}"]
 
@@ -80,7 +80,7 @@ jobs:
     - name: 加载.config设置
       run: |
         cd openwrt
-        cp -f defconfig/mt7981-ax3000.config .config
+        cp -f defconfig/mt7986-ax4200-bpir3_mini.config .config
         echo CONFIG_PACKAGE_kmod-wireguard=y >> .config
         echo CONFIG_PACKAGE_kmod-nft-socket=y >> .config
         echo CONFIG_PACKAGE_kmod-nft-tproxy=y >> .config
@@ -118,7 +118,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: mt7981-ax3000-mtwifi-cfg
+        name: mt7986-ax4200-bpir3_mini-mtwifi-cfg
         path: ${{ env.FIRMWARE }}
 
     - name: 生成release标签
@@ -127,7 +127,7 @@ jobs:
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")-ax3000-mtwifi-cfg">> $GITHUB_OUTPUT
         touch release.txt
-        echo -e "immortalwrt-mt798x-ax3000-mtwifi-cfg 源码版本" >> release.txt
+        echo -e "immortalwrt-mt7986-ax4200-bpir3_mini-mtwifi-cfg 源码版本" >> release.txt
         echo "📥 固件下载" >> release.txt
         echo "status=success" >>$GITHUB_OUTPUT
 
