@@ -92,6 +92,8 @@ jobs:
       id: package
       run: |
         cd openwrt
+        sed -i '/fastly.jsdelivr.net/d' scripts/download.pl
+        sed -i '/raw.gitmirror.com/d' scripts/download.pl
         make defconfig
         make download -j8 V=11
         find dl -size -1024c -exec ls -l {} \;
